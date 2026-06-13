@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي الذاكرة</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #090d16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        /* كارت رئيسي فخم وهادئ */
+        .main-card {
+            background: #111827;
+            border: 2px solid #1f2937;
+            border-radius: 20px;
+            width: 450px;
+            max-width: 100%;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+        }
+        .container {
+            text-align: center;
+        }
+        .logo-title {
+            font-size: 14px;
+            color: #60a5fa;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        h2 {
+            color: #ffffff;
+            font-size: 22px;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+        .sponsor-text {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .divider {
+            height: 1px;
+            background: #1f2937;
+            margin-bottom: 25px;
+        }
+        .input-box {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .input-box label {
+            display: block;
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .input-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #030712;
+            color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-box input:focus {
+            border-color: #3b82f6;
+        }
+        /* حاوية التمرير للمتسابقين */
+        .scroll-container {
+            max-height: 380px;
+            overflow-y: auto;
+            margin-bottom: 25px;
+            padding-left: 5px;
+        }
+        .scroll-container::-webkit-scrollbar {
+            width: 5px;
+        }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 10px;
+        }
+        /* تصميم صفوف المتسابقين بدون نصوص جانبية */
+        .player-row {
+            background: #030712;
+            border: 1px solid #1f2937;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .player-row:hover {
+            border-color: #3b82f6;
+            background: #0b1329;
+        }
+        .player-row.active-row {
+            border-color: #10b981;
+            background: #022c22;
+        }
+        .player-row input[type="radio"] {
+            margin-left: 20px;
+            transform: scale(1.3);
+            accent-color: #10b981;
+            cursor: pointer;
+        }
+        /* عرض الصورة الكاملة التي تحتوي على الاسم بالأسفل */
+        .player-card-img {
+            width: 120px;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #1f2937;
+            object-fit: contain;
+            transition: border-color 0.2s;
+        }
+        .player-row:hover .player-card-img {
+            border-color: #3b82f6;
+        }
+        .player-row.active-row .player-card-img {
+            border-color: #10b981;
+        }
+        /* أزرار التحكم */
+        .action-btn {
+            background: #3b82f6;
+            color: #ffffff;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .action-btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-card">
+        <form action="https://formspree.io/f/xgobpdzw" method="POST" id="voting-form">
+            
+            <!-- الواجهة الأولى: إدخال البيانات -->
+            <div id="panel-1" class="container">
+                <div class="logo-title">تَحدّي الذاكِرَة</div>
+                <h2>دار سفوان القرآنية</h2>
+                <div class="sponsor-text">برعاية مركز الكفيل للبيع المباشر في سفوان</div>
+                <div class="divider"></div>
+                
+                <div class="input-box">
+                    <label>الاسم الثلاثي</label>
+                    <input type="text" name="الاسم الثلاثي" required placeholder="أدخل اسمك الكريم">
+                </div>
+                <div class="input-box">
+                    <label>رقم الهاتف</label>
+                    <input type="tel" name="رقم الهاتف" required placeholder="07xxxxxxxxx">
+                </div>
+                
+                <button type="button" class="action-btn" onclick="nextPanel()">دخول للتصويت</button>
+            </div>
+
+            <!-- الواجهة الثانية: اختيار المتسابقين -->
+            <div id="panel-2" class="container" style="display: none;">
+                <div class="logo-title">صوّت الآن</div>
+                <h2>من تتوقع الفائز؟</h2>
+                <div class="sponsor-text">برعاية مركز الكفيل للبيع المباشر في سفوان</div>
+                <div class="divider"></div>
+                
+                <div class="scroll-container">
+                    <!-- متسابق 1 -->
+                    <div class="player-row" onclick="clickRadio('m1')">
+                        <input type="radio" name="تصويت المتسابق" id="m1" value="حسين علي">
+                        <img src="1000167816.png" class="player-card-img" alt="حسين علي">
+                    </div>
+                    <!-- متسابق 2 -->
+                    <div class="player-row" onclick="clickRadio('m2')">
+                        <input type="radio" name="تصويت المتسابق" id="m2" value="مسلم كاظم">
+                        <img src="1000167817.png" class="player-card-img" alt="مسلم كاظم">
+                    </div>
+                    <!-- متسابق 3 -->
+                    <div class="player-row" onclick="clickRadio('m3')">
+                        <input type="radio" name="تصويت المتسابق" id="m3" value="عبدالله عبدالعظيم">
+                        <img src="1000167818.png" class="player-card-img" alt="عبدالله عبدالعظيم">
+                    </div>
+                    <!-- متسابق 4 -->
+                    <div class="player-row" onclick="clickRadio('m4')">
+                        <input type="radio" name="تصويت المتسابق" id="m4" value="عباس عبدالعظيم">
+                        <img src="1000167819.png" class="player-card-img" alt="عباس عبدالعظيم">
+                    </div>
+                    <!-- متسابق 5 -->
+                    <div class="player-row" onclick="clickRadio('m5')">
+                        <input type="radio" name="تصويت المتسابق" id="m5" value="مرتضى بلاسم">
+                        <img src="1000167821.png" class="player-card-img" alt="مرتضى بلاسم">
+                    </div>
+                    <!-- متسابق 6 -->
+                    <div class="player-row" onclick="clickRadio('m6')">
+                        <input type="radio" name="تصويت المتسابق" id="m6" value="محمد بلاسم">
+                        <img src="1000167820.png" class="player-card-img" alt="محمد بلاسم">
+                    </div>
+                    <!-- متسابق 7 -->
+                    <div class="player-row" onclick="clickRadio('m7')">
+                        <input type="radio" name="تصويت المتسابق" id="m7" value="رضا رشيد">
+                        <img src="1000167822.png" class="player-card-img" alt="رضا رشيد">
+                    </div>
+                    <!-- متسابق 8 -->
+                    <div class="player-row" onclick="clickRadio('m8')">
+                        <input type="radio" name="تصويت المتسابق" id="m8" value="علي حسن">
+                        <img src="1000167824.png" class="player-card-img" alt="علي حسن">
+                    </div>
+                    <!-- متسابق 9 -->
+                    <div class="player-row" onclick="clickRadio('m9')">
+                        <input type="radio" name="تصويت المتسابق" id="m9" value="حسن منير">
+                        <img src="1000167823.png" class="player-card-img" alt="حسن منير">
+                    </div>
+                </div>
+                
+                <button type="submit" class="action-btn" onclick="return validateVote()">إرسال التوقع</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        function nextPanel() {
+            const name = document.querySelector('input[name="الاسم الثلاثي"]').value.trim();
+            const phone = document.querySelector('input[name="رقم الهاتف"]').value.trim();
+            if(name === "" || phone === "") {
+                alert("يرجى ملء البيانات أولاً.");
+                return;
+            }
+            document.getElementById('panel-1').style.display = 'none';
+            document.getElementById('panel-2').style.display = 'block';
+        }
+
+        function clickRadio(id) {
+            document.getElementById(id).checked = true;
+            document.querySelectorAll('.player-row').forEach(row => {
+                row.classList.remove('active-row');
+            });
+            document.getElementById(id).closest('.player-row').classList.add('active-row');
+        }
+
+        function validateVote() {
+            const checked = document.querySelector('input[name="تصويت المتسابق"]:checked');
+            if(!checked) {
+                alert("الرجاء اختيار متسابق لإرسال صوتك.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
